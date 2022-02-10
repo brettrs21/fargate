@@ -10,6 +10,7 @@ phases:
       - docker tag fargateapp 326194270889.dkr.ecr.us-west-2.amazonaws.com/fargate
   post_build:
     commands:
+      - echo "${DOCKERHUB_PASSWORD}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
       - docker push 326194270889.dkr.ecr.us-west-2.amazonaws.com/fargate
       - printf '[{"name":"fargateApp","imageUri":"%s"}]' 326194270889.dkr.ecr.us-west-2.amazonaws.com/fargate > imagedefinitions.json
 artifacts:
