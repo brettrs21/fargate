@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - $(aws ecr get-login --no-include-email --region us-west-2)
+  build:
+    commands:
+      - docker build -t fargateapp .
+      - docker tag fargateapp 326194270889.dkr.ecr.us-west-2.amazonaws.com/fargate
+  post_build:
+    commands:
+      - docker push 326194270889.dkr.ecr.us-west-2.amazonaws.com/fargate
+      - printf '[{"name":"fargateApp","imageUri":"%s"}]' 326194270889.dkr.ecr.us-west-2.amazonaws.com/fargate > imagedefinitions.json
+artifacts:
+  files: imagedefinitions.json
